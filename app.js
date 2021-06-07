@@ -1,6 +1,9 @@
 const express = require('express')
-require('dotenv').config()
+
+const errorHandler = require('errorhandler')
 const path = require('path')
+require('dotenv').config()
+
 const port = 3000
 
 const Prismic = require('@prismicio/client');
@@ -28,6 +31,8 @@ const handleLinkResolver = doc => {
 
 const app = express()
 
+app.use(errorHandler())
+
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
@@ -44,25 +49,31 @@ app.get('/', (req, res) => {
   res.render('pages/home')
 })
 
-app.get('/about', (req, res) => {
-  initApi(req).then(api => {
-    api.query(
-      Prismic.Predicates.any('document.type', ['meta', 'about']),
-    ).then(response => {
-      const { results } = response
-      const [meta, about] = results
-      console.log(meta.data);
-      res.render('pages/about', {
-        about,
-        meta
-      });
-    })
-  })
+app.get('/about', async (req, res) => {
+  const api = await initApi(req)
+  const meta = await api.getSingle('meta')
+  const about = await api.getSingle('about')
+    res.render('pages/about', {
+      about,
+      meta
+  });
 })
 
-app.get('/detail/:id', (req, res) => {
-  res.render('pages/detail')
+
+app.get('/detail/:uid', async (req, res) => {
+  const api = await initApi(req)
+  const meta = await api.getSingle('meta')
+  const product = await api.getByUID('product', req.params.uid, {
+    fetchLinks: 'collection.title'
+  })
+
+  console.log('product', product.data);
+  res.render('pages/detail', {
+    meta,
+    product
+  });
 })
+
 
 app.get('/collections', (req, res) => {
   res.render('pages/collection')
