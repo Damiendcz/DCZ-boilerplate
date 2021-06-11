@@ -15,6 +15,7 @@ app.use(errorHandler())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride())
+app.use(express.static(path.join(__dirname, 'public')))
 
 const Prismic = require('@prismicio/client');
 const PrismicDOM = require('prismic-dom');
