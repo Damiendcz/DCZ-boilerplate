@@ -1,5 +1,30 @@
 .home {
+  @extend %cover;
+  @extend %center;
 
+  // display: flex;
+  background: $color-contessa;
+  color: $color-quarter-spanish-white;
+  text-align: center;
+
+  &:before,
+  &:after {
+    content: '';
+    height: 24rem;
+    width: 100%;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+  }
+
+  &:before {
+    background: linear-gradient(to bottom, $color-contessa 0%,rgba($color-contessa,0) 100%);
+    top: 0;
+  }
+  &:after {
+    background: linear-gradient(to top, $color-contessa 0%,rgba($color-contessa,0) 100%);
+    bottom: 0;
+  }
 }
 
 .home__wrapper {
@@ -7,23 +32,26 @@
 }
 
 .home__titles {
-
+  @extend %vertical-titles;
 }
 
+
 .home__titles__label {
+  @extend %vertical-titles__label;
 
 }
 
 .home__title__title {
-
+  @extend %vertical-titles__title;
 }
 
-.home__gallery {
 
+.home__gallery {
+  @extend %cover;
 }
 
 .home__gallery__media {
-
+  position: absolute;
 }
 
 .home__gallery__image {
@@ -31,5 +59,21 @@
 }
 
 .home__link {
+  @extend %description-14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28.8rem;
+  height: 6rem;
+  letter-spacing: .05rem;
+  position: absolute;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-transform: uppercase;
+  z-index: 2;
+}
 
+.home__link__icon {
+  @extend %cover
 }
